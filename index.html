@@ -29,12 +29,10 @@
 
     function preload ()
     {
-        try {
-            this.load.setBaseURL('/');
-            this.load.image('sit', 'data/000.png');
-        } catch (error) {
+        if(window.location.href.indexOf("github") > -1) {
             this.load.setBaseURL('/petting-game/');
-            this.load.image('sit', 'data/000.png');
+        } else {
+            this.load.setBaseURL('/');
         }
 
         this.load.image('sit', 'data/000.png');

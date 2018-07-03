@@ -31,8 +31,10 @@
     {
         if(window.location.href.indexOf("github") > -1) {
             this.load.setBaseURL('/petting-game/');
+            console.log("GitHub");
         } else {
             this.load.setBaseURL('/');
+            console.log("Local");
         }
 
         this.load.image('sit', 'data/000.png');

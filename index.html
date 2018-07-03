@@ -5,16 +5,28 @@
 </head>
 <body>
 
+<style>
+    canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+    body {
+        margin: 0;
+    }
+</style>
+
 <script>
 
     var config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 640,
+        height: 360,
         physics: {
             default: 'arcade',
             arcade: {
-                debug: true
+                debug: false
             }
         },
         scene: {
@@ -52,13 +64,22 @@
 
     function create() {
 
-        platforms = this.physics.add.staticGroup();
-        platforms.create(300, 600, 'ground').setScale(1).refreshBody();
+        console.log(this.input);
 
-        player = this.physics.add.sprite(400, 400, 'stand');
+        platforms = this.physics.add.staticGroup();
+        platforms.create(0, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.create(125, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.create(250, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.create(375, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.create(500, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.create(625, 335, 'ground').setScale(0.2, 0.35).refreshBody();
+        platforms.displayOriginX = 0;
+        platforms.displayOriginY = 0;
+
+        player = this.physics.add.sprite(100, 100, 'stand');
         player.setBounce(0.2); // our player will bounce from items
         player.displayOriginX = 0;
-        player.displayOriginY = 0;
+        player.displayOriginY = 50;
         player.setScale(0.1, 0.1);
         player.setCollideWorldBounds(true); // don't go out of the map
         player.body.setGravityY(10000);
@@ -75,24 +96,45 @@
     }
 
     function update() {
-        if (cursors.left.isDown) // if the left arrow key is down
-        {
-            player.body.setVelocityX(-300); // move left
-        }
-        else if (cursors.right.isDown) // if the right arrow key is down
-        {
-            player.body.setVelocityX(300); // move right
-        }
-        else // if the right arrow key is down
-        {
-            player.body.setVelocityX(0); // move right
+        var move = null;
+        if (this.input.activePointer.isDown) {
+            console.log(player);
+            if (this.input.activePointer.x - player.x > 10) {
+                move = 'right';
+            } else if (this.input.activePointer.x - player.x < -10) {
+                move = 'left';
+            } else {
+                move = 'sit';
+            }
         }
 
-        if ((cursors.space.isDown || cursors.up.isDown))
+        if (move == 'left') // if the left arrow key is down
         {
-            player.body.setVelocityY(-500); // jump up
-        } else {
-            player.body.setVelocityY(0);
+            player.body.setVelocityX(-300); // move left
+            player.setTexture('walk');
+            if (player.scaleX < 0) {
+                player.scaleX *= -1;
+                player.displayOriginX = player.displayWidth * 0.0;
+            }
+        }
+        else if (move == 'right') // if the right arrow key is down
+        {
+            player.body.setVelocityX(300); // move right
+            player.setTexture('walk');
+            if (player.scaleX > 0) {
+                player.scaleX *= -1;
+                player.displayOriginX = player.displayWidth * -1;
+            }
+        }
+        else
+        {
+            player.body.setVelocityX(0); // move right
+            player.setTexture('stand')
+        }
+
+        if (move == 'sit')
+        {
+            player.setTexture('sit')
         }
     }
 </script>

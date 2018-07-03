@@ -29,7 +29,13 @@
 
     function preload ()
     {
-        this.load.setBaseURL('/');
+        try {
+            this.load.setBaseURL('/');
+            this.load.image('sit', 'data/000.png');
+        } catch (error) {
+            this.load.setBaseURL('/petting-game/');
+            this.load.image('sit', 'data/000.png');
+        }
 
         this.load.image('sit', 'data/000.png');
         this.load.image('stand', 'data/001.png');
